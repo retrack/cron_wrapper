@@ -1,0 +1,22 @@
+#!/bin/bash
+# Wrapper
+
+# Initialisation
+if [ "$1" == "" ]; then
+exit 1
+fi
+
+interval=$1
+
+
+next=$(date +%M | awk -v interval=$interval '{ print int($0 * 60 % interval) }')
+
+if [ $next -gt 0 ]; then
+next=$(echo $next | awk -v interval=$interval '{print interval - $0}')
+fi
+
+
+for i in $(seq $next $interval 59)
+do
+(sleep $i; echo "do stuff") &
+done
